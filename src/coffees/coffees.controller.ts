@@ -1,41 +1,51 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-
-const coffees = [
-  {
-    id: 1,
-    name: 'Arabica',
-    brand: 'Brand A',
-    flavors: ['chocolate', 'vanilla'],
-  },
-  {
-    id: 2,
-    name: 'Robusta',
-    brand: 'Brand B',
-    flavors: ['spicy', 'nutty'],
-  },
-];
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpCode,
+  HttpStatus,
+  Patch,
+  Delete,
+  Query,
+} from '@nestjs/common';
+import { CoffeesService } from './coffees.service';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Controller('coffees')
 export class CoffeesController {
+  constructor(private readonly coffeesService: CoffeesService) {}
+
   @Get()
-  findAll() {
-    return coffees;
+  findAll(@Query() query: any) {
+    return this.coffeesService.findAll(query);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     const coffeeId = parseInt(id, 10);
-    return coffees.find((coffee) => coffee.id === coffeeId);
+    return this.coffeesService.findOne(coffeeId);
   }
 
   @Post()
-  create(@Body() body: any) {
-    coffees.push({
-      id: coffees.length + 1,
-      name: body.name,
-      brand: body.brand,
-      ...body,
-    });
-    return coffees;
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() CreateCoffeeDto: CreateCoffeeDto) {
+    return this.coffeesService.create(CreateCoffeeDto);
+  }
+
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  update(@Body() UpdateCoffeeDto: UpdateCoffeeDto, @Param('id') id: string) {
+    const coffeeId = parseInt(id, 10);
+    return this.coffeesService.update(coffeeId, UpdateCoffeeDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id') id: string) {
+    const coffeeId = parseInt(id, 10);
+    return this.coffeesService.remove(coffeeId);
   }
 }

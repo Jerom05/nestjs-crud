@@ -38,7 +38,7 @@ export class CoffeesService {
       ...coffee,
       id: this.coffees.length + 1,
     });
-    return coffee
+    return coffee;
   }
 
   update(id: number, coffee: UpdateCoffeeDto) {

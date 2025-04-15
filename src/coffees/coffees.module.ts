@@ -11,9 +11,10 @@ import { Event } from '../events/entities/event.entity/event.entity';
   imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])],
   controllers: [CoffeesController],
   providers: [
+    CoffeesService,
     {
-      provide: CoffeesService,
-      useClass: CoffeesService,
+      provide: 'COFFEE_BRANDS',
+      useValue: ['Buddy Brew', 'Blue Bottle', 'Drip'],
     },
   ],
   exports: [CoffeesService],

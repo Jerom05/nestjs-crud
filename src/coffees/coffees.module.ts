@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Inject, Injectable, Module } from '@nestjs/common';
 
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
@@ -10,6 +10,13 @@ import { Event } from '../events/entities/event.entity/event.entity';
 class ConfigService {}
 class DevelopmentConfigService {}
 class ProductionConfigService {}
+
+@Injectable()
+export class CoffeeBrandFactory {
+  create() {
+    return ['Buddy Brew', 'Blue Bottle', 'Drip'];
+  }
+}
 
 @Module({
   imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])],
@@ -26,6 +33,13 @@ class ProductionConfigService {}
         process.env.NODE_ENV === 'development'
           ? DevelopmentConfigService
           : ProductionConfigService,
+    },
+    {
+      provide: 'COFFEE_BRAND_FACTORY',
+      useFactory: (coffeeBrandFactory: CoffeeBrandFactory) => {
+        return coffeeBrandFactory.create();
+      },
+      inject: [CoffeeBrandFactory],
     },
   ],
   exports: [CoffeesService],

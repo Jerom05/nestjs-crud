@@ -23,6 +23,7 @@ export class CoffeeBrandFactory {
   controllers: [CoffeesController],
   providers: [
     CoffeesService,
+    CoffeeBrandFactory,
     {
       provide: 'COFFEE_BRANDS',
       useValue: ['Buddy Brew', 'Blue Bottle', 'Drip'],

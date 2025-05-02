@@ -17,7 +17,6 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExecptionFilter());
-  app.useGlobalGuards(new ApiKeyGuard());
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

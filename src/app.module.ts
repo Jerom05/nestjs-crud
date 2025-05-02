@@ -31,6 +31,7 @@ import { CommonModule } from './common/common.module';
         DATABASE_HOST: Joi.string().required(),
         DATABASE_PORT: Joi.string().required().default(5432),
         DATABASE_USER: Joi.string().required(),
+        API_KEY: Joi.string().required(),
       }),
     }),
     CoffeesModule,
